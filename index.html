@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VNTG 비품 나눔 장터</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
 :root {
   --g1:#0a2e1a;--g2:#0f4a2a;--g3:#166534;--g4:#15803d;--g5:#16a34a;
@@ -323,11 +323,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
         <div class="uav" id="av-wrap">G</div>
         <div class="uinfo">
           <div class="uname" id="hdr-name">사용자</div>
-          <div class="uemail" id="hdr-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e3b3d2b3c0e38203a292d213c3e602d2123">[email&#160;protected]</a></div>
+          <div class="uemail" id="hdr-email"></div>
         </div>
         <div class="pdrop" id="pdrop">
           <h4>내 계정</h4>
-          <div class="pdrop-email" id="pdrop-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e4b4d5b4c7e48504a595d514c4e105d5153">[email&#160;protected]</a></div>
+          <div class="pdrop-email" id="pdrop-email"></div>
           <h4>닉네임 설정</h4>
           <input type="text" id="pd-nick" placeholder="닉네임 입력">
           <button class="btn-sp" onclick="saveProfile()">저장</button>
@@ -677,33 +677,49 @@ window.onload = function() {
     document.getElementById('setup-banner').style.display = 'block';
     return;
   }
-  const tryInit = setInterval(() => {
+  // 동기 로드이므로 바로 초기화 시도, 실패 시 폴백
+  function initGoogle() {
     if (typeof google !== 'undefined' && google.accounts) {
-      clearInterval(tryInit);
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCallback,
         auto_select: false,
         hd: ALLOWED_DOMAIN
       });
+      console.log('✅ Google OAuth 초기화 완료');
+    } else {
+      // 혹시 늦게 로드된 경우 재시도
+      setTimeout(initGoogle, 300);
     }
-  }, 200);
+  }
+  initGoogle();
 };
 
 function startGoogleLogin() {
+  // SDK 미로드 방어
+  if (typeof google === 'undefined' || !google.accounts) {
+    showErr('Google 로그인 SDK를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
   document.getElementById('google-btn-wrap').style.display = 'none';
   document.getElementById('spinner-wrap').style.display    = 'block';
   document.getElementById('lerr').style.display            = 'none';
-  google.accounts.id.prompt((n) => {
-    if (n.isNotDisplayed() || n.isSkippedMoment()) {
-      document.getElementById('google-btn-wrap').style.display = 'flex';
-      document.getElementById('spinner-wrap').style.display    = 'none';
-      google.accounts.id.renderButton(
-        document.getElementById('google-btn-wrap'),
-        { theme:'outline', size:'large', width:360, text:'signin_with', locale:'ko' }
-      );
-    }
-  });
+  try {
+    google.accounts.id.prompt((n) => {
+      if (n.isNotDisplayed() || n.isSkippedMoment()) {
+        document.getElementById('google-btn-wrap').style.display = 'flex';
+        document.getElementById('spinner-wrap').style.display    = 'none';
+        google.accounts.id.renderButton(
+          document.getElementById('google-btn-wrap'),
+          { theme:'outline', size:'large', width:360, text:'signin_with', locale:'ko' }
+        );
+      }
+    });
+  } catch(e) {
+    document.getElementById('google-btn-wrap').style.display = 'flex';
+    document.getElementById('spinner-wrap').style.display    = 'none';
+    showErr('로그인 중 오류가 발생했습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+  }
 }
 
 function handleGoogleCallback(response) {
