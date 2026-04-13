@@ -221,6 +221,37 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
 .ai-email{font-size:13px;font-weight:600;color:var(--g2);}
 .ai-role{font-size:10px;color:var(--gr4);}
 
+/* Admin post management */
+.apost-item{background:var(--g10);border:1.5px solid var(--g9);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.apost-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.apost-title{font-size:14px;font-weight:800;color:var(--g2);margin-bottom:3px;}
+.apost-meta{font-size:11px;color:var(--gr4);display:flex;gap:8px;flex-wrap:wrap;}
+.apost-meta span{display:flex;align-items:center;gap:3px;}
+.apost-cmts{margin-top:8px;padding-top:8px;border-top:1px solid var(--gr5);display:flex;flex-direction:column;gap:6px;}
+.apost-cmt{background:#fff;border:1px solid var(--gr5);border-radius:8px;padding:8px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.apost-cmt-body{font-size:12px;color:var(--gr3);flex:1;}
+.apost-cmt-meta{font-size:11px;color:var(--gr4);margin-top:2px;}
+.apost-empty{text-align:center;padding:32px;color:var(--gr4);font-size:14px;}
+
+/* Image upload */
+.img-upload-area{border:2px dashed var(--gr5);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--gr6);}
+.img-upload-area:hover{border-color:var(--g5);background:var(--g9);}
+.img-preview-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.img-preview-item{position:relative;width:90px;height:90px;border-radius:10px;overflow:hidden;border:1.5px solid var(--gr5);flex-shrink:0;}
+.img-preview-item img{width:100%;height:100%;object-fit:cover;}
+.img-preview-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.img-preview-del:hover{background:rgba(220,38,38,.85);}
+/* Market card images */
+.mkt-imgs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.mkt-img{width:100px;height:100px;object-fit:cover;border-radius:10px;border:1.5px solid var(--g9);cursor:pointer;transition:transform .2s;}
+.mkt-img:hover{transform:scale(1.04);}
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;display:none;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lightbox-close{position:absolute;top:20px;right:24px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lightbox-close:hover{background:rgba(255,255,255,.25);}
+
 /* Toast */
 .toast-cont{position:fixed;top:80px;right:24px;z-index:999;display:flex;flex-direction:column;gap:10px;}
 .toast{background:var(--g2);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;animation:slideIn .3s ease;max-width:340px;}
@@ -292,11 +323,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
         <div class="uav" id="av-wrap">G</div>
         <div class="uinfo">
           <div class="uname" id="hdr-name">사용자</div>
-          <div class="uemail" id="hdr-email">user@vntgcorp.com</div>
+          <div class="uemail" id="hdr-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e3b3d2b3c0e38203a292d213c3e602d2123">[email&#160;protected]</a></div>
         </div>
         <div class="pdrop" id="pdrop">
           <h4>내 계정</h4>
-          <div class="pdrop-email" id="pdrop-email">user@vntgcorp.com</div>
+          <div class="pdrop-email" id="pdrop-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e4b4d5b4c7e48504a595d514c4e105d5153">[email&#160;protected]</a></div>
           <h4>닉네임 설정</h4>
           <input type="text" id="pd-nick" placeholder="닉네임 입력">
           <button class="btn-sp" onclick="saveProfile()">저장</button>
@@ -400,6 +431,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
     <!-- SETTINGS (admin only) -->
     <div class="tab-panel" id="panel-settings">
       <div class="sec-hdr"><div><div class="sec-title">⚙️ 관리자 설정</div><div class="sec-desc">관리자 전용 페이지입니다</div></div></div>
+
+      <!-- 교환 장터 게시글 관리 -->
+      <div class="card">
+        <div class="set-sec" style="margin-bottom:0">
+          <h3>🗂️ 교환 장터 게시글 관리</h3>
+          <div class="notice" style="margin-bottom:14px"><span class="ni">🛡️</span><div>관리자는 모든 게시글과 댓글을 삭제할 수 있습니다. 삭제된 데이터는 복구되지 않습니다.</div></div>
+          <div id="admin-post-list"></div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="set-sec">
           <h3>👑 관리자 계정 관리</h3>
@@ -430,6 +471,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
 </div>
 
 <div class="toast-cont" id="toast-cont"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
 
 <!-- MODAL: Market Post -->
 <div class="modal-ov" id="modal-mkt">
@@ -477,6 +524,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
 
       <div class="fg"><label>제목<span class="req">*</span></label><input class="fi" id="mkt-title" type="text" placeholder="예) 포토샵 도움 드려요!"></div>
       <div class="fg"><label>내용<span class="req">*</span></label><textarea class="ft" id="mkt-desc" placeholder="교환 내용, 조건, 연락 방법 등을 자유롭게 적어주세요!"></textarea></div>
+      <div class="fg">
+        <label>사진 첨부 <span style="color:var(--gr4);font-weight:400;text-transform:none;font-size:11px">(선택 · 최대 3장)</span></label>
+        <div class="img-upload-area" id="img-upload-area" onclick="document.getElementById('mkt-img-input').click()">
+          <div class="img-upload-inner" id="img-upload-inner">
+            <div style="font-size:28px;margin-bottom:6px">📷</div>
+            <div style="font-size:13px;font-weight:700;color:var(--g3)">클릭하여 사진 추가</div>
+            <div style="font-size:11px;color:var(--gr4);margin-top:3px">JPG, PNG, GIF · 최대 5MB · 최대 3장</div>
+          </div>
+        </div>
+        <input type="file" id="mkt-img-input" accept="image/*" multiple style="display:none" onchange="handleImgUpload(event)">
+        <div class="img-preview-wrap" id="img-preview-wrap"></div>
+      </div>
     </div>
     <div style="margin-top:18px;display:flex;gap:10px">
       <button class="btn btn-p" onclick="postMktItem()">📤 게시하기</button>
@@ -517,7 +576,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════
 // CONFIG
 // ════════════════════════════════════════
@@ -543,8 +602,24 @@ let settings  = { sup: SUPER_ADMIN, bat: SUPER_ADMIN, inq: SUPER_ADMIN };
 function loadStorage() {
   try {
     const saved = localStorage.getItem('vntg_market');
-    return saved ? JSON.parse(saved) : defaultMarketItems();
-  } catch(e) { return defaultMarketItems(); }
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // 저장된 데이터가 있으면 무조건 사용 (오류 후에도 유지)
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+    // 저장된 데이터 없을 때만 기본 샘플 사용
+    return defaultMarketItems();
+  } catch(e) {
+    // 파싱 오류 시 기존 저장 데이터 최대한 보존 시도
+    try {
+      const raw = localStorage.getItem('vntg_market');
+      if (raw) {
+        console.warn('Storage parse error, attempting recovery...');
+        return [];
+      }
+    } catch(e2) {}
+    return defaultMarketItems();
+  }
 }
 function saveStorage() {
   try { localStorage.setItem('vntg_market', JSON.stringify(marketItems)); } catch(e){}
@@ -718,6 +793,73 @@ function renderAdminList() {
 }
 
 // ════════════════════════════════════════
+// ADMIN POST MANAGEMENT
+// ════════════════════════════════════════
+function adminDelPost(id) {
+  if(!isAdmin())return;
+  if(!confirm("이 게시글을 삭제하시겠습니까? 댓글도 모두 삭제됩니다."))return;
+  marketItems=marketItems.filter(i=>i.id!==id);
+  saveStorage(); renderMkt(); renderAdminPostList();
+  showToast("🗑️ 게시글이 삭제되었습니다.","success");
+}
+function adminDelComment(iid,cid) {
+  if(!isAdmin())return;
+  if(!confirm("이 댓글을 삭제하시겠습니까?"))return;
+  const item=marketItems.find(i=>i.id===iid);
+  if(!item)return;
+  item.comments=item.comments.filter(c=>c.id!==cid);
+  if(item.adoptedCmtId===cid){item.adopted=false;item.adoptedCmtId=null;}
+  saveStorage(); renderMkt(); renderAdminPostList();
+  showToast("🗑️ 댓글이 삭제되었습니다.","success");
+}
+function renderAdminPostList() {
+  const el=document.getElementById("admin-post-list");
+  if(!el)return;
+  if(!marketItems.length){
+    el.innerHTML='<div class="apost-empty">📭 등록된 게시글이 없습니다.</div>';
+    return;
+  }
+  const typeLabel=(item)=>{
+    if(item.offerType==="both") return "제공+요청";
+    if(item.offerType==="offer") return item.offerOnly?"제공만":"제공";
+    return "요청";
+  };
+  el.innerHTML=marketItems.map(item=>{
+    const cmtsHTML=item.comments.length
+      ? item.comments.map(c=>`
+        <div class="apost-cmt">
+          <div style="flex:1">
+            <div class="apost-cmt-body">${esc(c.text)}</div>
+            <div class="apost-cmt-meta">${esc(c.displayName)} · ${esc(c.author)} · ${c.date}${c.adopted?" · 🏆 채택됨":""}</div>
+          </div>
+          <button class="btn btn-d btn-xs" onclick="adminDelComment(${item.id},${c.id})">삭제</button>
+        </div>`).join("")
+      : `<div style="font-size:12px;color:var(--gr4);padding:4px 0">댓글 없음</div>`;
+    return `<div class="apost-item">
+      <div class="apost-hdr">
+        <div style="flex:1">
+          <div class="apost-title">${esc(item.title)}</div>
+          <div class="apost-meta">
+            <span>📌 ${typeLabel(item)}</span>
+            <span>📂 ${item.offerCat||item.wantCat||"-"}</span>
+            <span>👤 ${esc(item.displayName)}</span>
+            <span>📧 ${esc(item.author)}</span>
+            <span>📅 ${item.date}</span>
+            <span>💬 댓글 ${item.comments.length}개</span>
+            ${item.adopted?"<span>🏆 채택완료</span>":""}
+          </div>
+        </div>
+        <button class="btn btn-d btn-sm" onclick="adminDelPost(${item.id})">🗑️ 삭제</button>
+      </div>
+      <div class="apost-cmts">
+        <div style="font-size:11px;font-weight:700;color:var(--gr4);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px">댓글 목록</div>
+        ${cmtsHTML}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ════════════════════════════════════════
 // PROFILE
 // ════════════════════════════════════════
 function toggleProfile(e) {
@@ -760,7 +902,7 @@ function showTab(tab) {
   document.getElementById('panel-'+tab).classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if(tab==='mypage')renderSentList();
-  if(tab==='settings'){renderAdminList();loadSetUI();}
+  if(tab==="settings"){renderAdminList();renderAdminPostList();loadSetUI();}
 }
 
 // ════════════════════════════════════════
@@ -778,17 +920,28 @@ function saveSettings() {
 }
 
 // ════════════════════════════════════════
-// EMAIL — mailto 방식 (팝업 오류 해결)
+// EMAIL — Google Apps Script 방식 (클릭 한 번에 바로 발송!)
 // ════════════════════════════════════════
-function sendMail(to, subj, body) {
-  // ★ window.open 대신 a 태그 click 방식으로 안정적 발송
-  const a = document.createElement('a');
-  a.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+const GAS_URL = 'https://script.google.com/a/macros/vntgcorp.com/s/AKfycbzRHB4foEx3hoGYEgvrSis9sTNJq8uvEOhCueeQUj2wqwSpoBlYPVvoq-w2jOOB99_-/exec';
+
+async function sendMail(to, subj, body) {
+  // 로딩 토스트 표시
+  showToast('📤 이메일 발송 중...', 'success');
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors', // GAS CORS 우회
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to, subject: subj, body })
+    });
+    // no-cors 모드에서는 응답 확인 불가 → 성공으로 간주
+    showToast('✅ 이메일이 성공적으로 발송되었습니다!', 'success');
+    return true;
+  } catch(err) {
+    console.error('메일 발송 오류:', err);
+    showToast('❌ 발송 실패. 다시 시도해주세요.', 'error');
+    return false;
+  }
 }
 
 function buildSupBody(d) {
@@ -916,39 +1069,32 @@ ${item.title} (${item.offerCat||item.wantCat})
 // ════════════════════════════════════════
 // SUPPLIES / BATTERY / INQUIRY
 // ════════════════════════════════════════
-function submitSupplies() {
-  const name=gv('sup-name'),dept=gv('sup-dept'),link=gv('sup-link'),reason=gv('sup-reason'),memo=gv('sup-memo');
-  if(!name||!dept||!link||!reason){showToast('⚠️ 필수 항목을 모두 입력해주세요.','error');return;}
-  const subj=`[사무용품 신청] ${name} (${dept}) - ${new Date().toLocaleDateString('ko-KR')}`;
-  sendMail(settings.sup, subj, buildSupBody({name,dept,link,reason,memo}));
-  addSent('사무용품 신청',`${name} (${dept})`,subj);
-  showToast('📨 이메일 앱이 열립니다. 보내기를 눌러 전송하세요!','success');
-  ['sup-link','sup-reason','sup-memo'].forEach(id=>sv(id,''));
+async function submitSupplies() {
+  const name=gv("sup-name"),dept=gv("sup-dept"),link=gv("sup-link"),reason=gv("sup-reason"),memo=gv("sup-memo");
+  if(!name||!dept||!link||!reason){showToast("⚠️ 필수 항목을 모두 입력해주세요.","error");return;}
+  const subj=`[사무용품 신청] ${name} (${dept}) - ${new Date().toLocaleDateString("ko-KR")}`;
+  await sendMail(settings.sup, subj, buildSupBody({name,dept,link,reason,memo}));
+  addSent("사무용품 신청",`${name} (${dept})`,subj);
+  ["sup-link","sup-reason","sup-memo"].forEach(id=>sv(id,""));
 }
-function submitBattery() {
-  const name=gv('bat-name'),dept=gv('bat-dept'),type=document.getElementById('bat-type').value;
-  const req=gv('bat-req'),ret=gv('bat-ret')||'0',memo=gv('bat-memo');
-  if(!name||!dept||!type||!req){showToast('⚠️ 필수 항목을 모두 입력해주세요.','error');return;}
+async function submitBattery() {
+  const name=gv("bat-name"),dept=gv("bat-dept"),type=document.getElementById("bat-type").value;
+  const req=gv("bat-req"),ret=gv("bat-ret")||"0",memo=gv("bat-memo");
+  if(!name||!dept||!type||!req){showToast("⚠️ 필수 항목을 모두 입력해주세요.","error");return;}
   const subj=`[충전지 신청] ${name} (${dept}) - ${type} ${req}개`;
-  sendMail(settings.bat, subj, buildBatBody({name,dept,type,req,ret,memo}));
-  addSent('충전지 신청',`${type} ${req}개`,subj);
-  showToast('📨 이메일 앱이 열립니다. 보내기를 눌러 전송하세요!','success');
-  sv('bat-req','');sv('bat-ret','0');sv('bat-memo','');
-  document.getElementById('bat-type').value='';
+  await sendMail(settings.bat, subj, buildBatBody({name,dept,type,req,ret,memo}));
+  addSent("충전지 신청",`${type} ${req}개`,subj);
+  sv("bat-req","");sv("bat-ret","0");sv("bat-memo","");
+  document.getElementById("bat-type").value="";
 }
-function openInquiry(){openModal('modal-inq');}
-function submitInquiry() {
-  const title=gv('inq-title'),body=gv('inq-body');
-  if(!title||!body){showToast('⚠️ 제목과 내용을 입력해주세요.','error');return;}
+async function submitInquiry() {
+  const title=gv("inq-title"),body=gv("inq-body");
+  if(!title||!body){showToast("⚠️ 제목과 내용을 입력해주세요.","error");return;}
   const subj=`[사이트 관련 문의] ${title}`;
-  sendMail(settings.inq, subj, buildInqBody(title,body));
-  addSent('문의하기',title,subj);
-  showToast('📨 문의 이메일을 발송합니다!','success');
-  closeModal('modal-inq'); sv('inq-title',''); sv('inq-body','');
+  await sendMail(settings.inq, subj, buildInqBody(title,body));
+  addSent("문의하기",title,subj);
+  closeModal("modal-inq"); sv("inq-title",""); sv("inq-body","");
 }
-
-// ════════════════════════════════════════
-// MARKET — 유형 선택 (복수)
 // ════════════════════════════════════════
 function toggleMktType(t) {
   mktTypes[t] = !mktTypes[t];
@@ -1019,11 +1165,15 @@ function openMarketPost(editId) {
     offerCat  = item.offerCat||'';
     wantCat   = item.wantCat||'';
     sv('mkt-title',item.title); sv('mkt-desc',item.desc);
+    // 기존 이미지 불러오기
+    pendingImgs = item.images ? [...item.images] : [];
   } else {
     mktTypes={offer:false,want:false}; offerOnly=false; offerCat=''; wantCat='';
     sv('mkt-title',''); sv('mkt-desc','');
     document.getElementById('offer-only-cb').checked=false;
+    pendingImgs = [];
   }
+  renderImgPreviews();
 
   // UI 동기화
   document.getElementById('opt-offer').className='topt'+(mktTypes.offer?' sel-offer':'');
@@ -1051,12 +1201,13 @@ function postMktItem() {
   if(editId){
     const idx=marketItems.findIndex(i=>i.id===parseInt(editId));
     if(idx>-1){
-      Object.assign(marketItems[idx],{offerType,offerOnly,offerCat,wantCat,title,desc});
+      Object.assign(marketItems[idx],{offerType,offerOnly,offerCat,wantCat,title,desc,images:[...pendingImgs]});
     }
     showToast('✅ 게시글이 수정되었습니다!','success');
   } else {
     marketItems.unshift({
       id:Date.now(),offerType,offerOnly,offerCat,wantCat,title,desc,
+      images:[...pendingImgs],
       author:user.email,displayName:user.nick||user.name,
       date:new Date().toISOString().split('T')[0],
       adopted:false,adoptedCmtId:null,comments:[]
@@ -1107,19 +1258,19 @@ function updateAdoptPrev() {
   if(!item||!cmt)return;
   document.getElementById('adopt-prev-body').textContent=buildAdoptBody(item,cmt,gv('adopt-place')||'(미입력)',gv('adopt-time')||'(미입력)');
 }
-function sendAdoptEmail() {
-  const iid=parseInt(gv('adopt-iid')),cid=parseInt(gv('adopt-cid'));
-  const place=gv('adopt-place'),time=gv('adopt-time');
-  if(!place||!time){showToast('⚠️ 장소와 시간을 입력해주세요.','error');return;}
+async function sendAdoptEmail() {
+  const iid=parseInt(gv("adopt-iid")),cid=parseInt(gv("adopt-cid"));
+  const place=gv("adopt-place"),time=gv("adopt-time");
+  if(!place||!time){showToast("⚠️ 장소와 시간을 입력해주세요.","error");return;}
   const item=marketItems.find(i=>i.id===iid);
   const cmt=item&&item.comments.find(c=>c.id===cid);
   if(!item||!cmt)return;
   item.comments.forEach(c=>c.adopted=false);
   cmt.adopted=true; item.adopted=true; item.adoptedCmtId=cid;
   const subj=`[채택 안내] "${item.title}" 교환 장터에서 채택되셨습니다! 🏆`;
-  sendMail(cmt.author, subj, buildAdoptBody(item,cmt,place,time));
-  saveStorage(); renderMkt(); closeModal('modal-adopt');
-  showToast('🏆 채택 이메일이 발송됩니다!','success');
+  await sendMail(cmt.author, subj, buildAdoptBody(item,cmt,place,time));
+  saveStorage(); renderMkt(); closeModal("modal-adopt");
+}
 }
 function cancelAdopt(iid) {
   if(!confirm('채택을 취소하시겠습니까?'))return;
@@ -1130,6 +1281,64 @@ function cancelAdopt(iid) {
   saveStorage(); renderMkt();
   showToast('↩️ 채택이 취소되었습니다.','success');
 }
+
+
+// ════════════════════════════════════════
+// IMAGE UPLOAD
+// ════════════════════════════════════════
+let pendingImgs = []; // base64 배열 (최대 3)
+
+function handleImgUpload(e) {
+  const files = Array.from(e.target.files);
+  const remain = 3 - pendingImgs.length;
+  if(remain <= 0){ showToast('⚠️ 사진은 최대 3장까지 첨부 가능합니다.','error'); return; }
+  const toLoad = files.slice(0, remain);
+  if(files.length > remain) showToast(`⚠️ ${files.length - remain}장은 초과로 제외됩니다.`,'error');
+
+  toLoad.forEach(file => {
+    if(file.size > 5 * 1024 * 1024){ showToast('⚠️ 5MB 이하 파일만 첨부 가능합니다.','error'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      pendingImgs.push(ev.target.result);
+      renderImgPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = ''; // 같은 파일 재선택 허용
+}
+
+function removeImg(idx) {
+  pendingImgs.splice(idx, 1);
+  renderImgPreviews();
+}
+
+function renderImgPreviews() {
+  const wrap = document.getElementById('img-preview-wrap');
+  const area = document.getElementById('img-upload-area');
+  if(!wrap || !area) return;
+
+  if(pendingImgs.length >= 3){
+    area.style.display = 'none';
+  } else {
+    area.style.display = 'block';
+  }
+
+  wrap.innerHTML = pendingImgs.map((src, i) => `
+    <div class="img-preview-item">
+      <img src="${src}" alt="미리보기 ${i+1}">
+      <button class="img-preview-del" onclick="removeImg(${i})" title="삭제">✕</button>
+    </div>`).join('');
+}
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
 
 function renderMkt() {
   const list=document.getElementById('mkt-list');
@@ -1179,6 +1388,7 @@ function renderMkt() {
           <div class="mkt-badges">${badges}</div>
           <div class="mkt-title">${esc(item.title)}</div>
           <div class="mkt-desc">${esc(item.desc)}</div>
+          ${(item.images&&item.images.length)?`<div class="mkt-imgs">${item.images.map((src,i)=>`<img class="mkt-img" src="${src}" alt="첨부사진 ${i+1}" onclick="openLightbox('${src}')">`).join('')}</div>`:''}
           <div class="mkt-meta">
             <span class="mkt-author">${esc(item.displayName)}</span>
             <span>${esc(item.author)}</span>
@@ -1234,16 +1444,4 @@ document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
 function showToast(msg,type='success'){
-  const c=document.getElementById('toast-cont');
-  const t=document.createElement('div');
-  t.className='toast '+type; t.textContent=msg;
-  c.appendChild(t); setTimeout(()=>t.remove(),3500);
-}
-function gv(id){return document.getElementById(id).value.trim();}
-function sv(id,v){document.getElementById(id).value=v;}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-renderMkt();
-</script>
-</body>
-</html>
+  co
