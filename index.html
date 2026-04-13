@@ -576,6 +576,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--g10);color:var(--gr1
   </div>
 </div>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════
 // CONFIG
 // ════════════════════════════════════════
@@ -1453,57 +1454,10 @@ function renderSentList(){
 // ════════════════════════════════════════
 // MODAL / TOAST / UTIL
 // ════════════════════════════════════════
-function openModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.add('open');
-}
-
-function closeModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.remove('open');
-}
-
-// 배경 클릭 시 모달 닫기
-document.querySelectorAll('.modal-ov').forEach(o => {
-    o.addEventListener('click', e => {
-        if (e.target === o) o.classList.remove('open');
-    });
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-ov').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
-
-// 토스트 알림 함수 (끊겼던 부분 복구)
-function showToast(msg, type = 'success') {
-    const cont = document.getElementById('toast-cont');
-    if (!cont) return;
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = msg;
-
-    cont.appendChild(toast);
-
-    // 3초 후 제거
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 500);
-    }, 3000);
-}
-
-// 보안을 위한 텍스트 이스케이프 함수
-function esc(str) {
-    if (!str) return '';
-    const p = document.createElement('p');
-    p.textContent = str;
-    return p.innerHTML;
-}
-
-// 입력값 가져오기 (Helper)
-function gv(id) {
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
-}
-
-// 입력값 설정 (Helper)
-function sv(id, val) {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-}
+function showToast(msg,type='success'){
+  co
