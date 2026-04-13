@@ -1454,10 +1454,73 @@ function renderSentList(){
 // ════════════════════════════════════════
 // MODAL / TOAST / UTIL
 // ════════════════════════════════════════
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.modal-ov').forEach(o=>{
-  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('open');
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('open');
+}
+
+// 모달 배경 클릭 시 닫기
+document.querySelectorAll('.modal-ov').forEach(o => {
+    o.addEventListener('click', e => {
+        if (e.target === o) o.classList.remove('open');
+    });
 });
-function showToast(msg,type='success'){
-  co
+
+/**
+ * 토스트 메시지 표시 함수
+ * @param {string} msg - 표시할 메시지
+ * @param {string} type - 'success' 또는 'error'
+ */
+function showToast(msg, type = 'success') {
+    const cont = document.getElementById('toast-cont');
+    if (!cont) return;
+
+    // 토스트 요소 생성
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    // 아이콘 추가 (성공/에러 구분)
+    const icon = type === 'success' ? '✅' : '❌';
+    toast.innerHTML = `<span>${icon}</span> ${msg}`;
+
+    // 화면에 추가
+    cont.appendChild(toast);
+
+    // 3초 후 제거 애니메이션
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(20px)';
+        toast.style.transition = 'all 0.5s ease';
+        
+        setTimeout(() => {
+            if (toast.parentNode === cont) {
+                cont.removeChild(toast);
+            }
+        }, 500);
+    }, 3000);
+}
+
+// HTML 엔티티 이스케이프 (보안용)
+function esc(str) {
+    if (!str) return '';
+    const p = document.createElement('p');
+    p.textContent = str;
+    return p.innerHTML;
+}
+
+// 입력값 가져오기 도우미
+function gv(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+}
+
+// 입력값 설정하기 도우미
+function sv(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+}
